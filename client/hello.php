@@ -2,11 +2,11 @@
 
 	require_once "../lib/dbconnect.php";
 	
-	$sql = "select * from board";
+	$sql = "select * from game_status";
 	
 	$st = $mysqli->prepare($sql);
 	$st->execute();
-	$res = $res->fetch_result();
+	$res = $res->get_result();
 	$r = $res->fetch_assoc();
 	print "status: $r[status], last_change: $r[last_change]";
 
