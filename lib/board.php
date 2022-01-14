@@ -39,19 +39,61 @@
 
 	}
 
-	function do_move($x,$y,$x2,$y2) {
+	function convert_board(&$orig_board) {
+		$board=[];
+		foreach($orig_board as $i=>&$row) {
+			$board[$row['x']][$row['y']] = &$row;
+		} 
+		return($board);
+	}
+
+	function selectp($x,$y,$token){
+		if($token==null || $token=='') {
+			header("HTTP/1.1 400 Bad Request");
+			print json_encode(['errormesg'=>"token is not set."]);
+			exit;
+		}
+
 		global $mysqli;
-		$sql = 'call `move_piece`(?,?,?,?);';
+		$sql = 'call `select_piece`(?,?);';
 		$st = $mysqli->prepare($sql);
-		$st->bind_param('iiii',$x,$y,$x2,$y2 );
+		$st->bind_param('ii',$x,$y);
 		$st->execute();
 
 		header('Content-type: application/json');
 		print json_encode(read_board(), JSON_PRETTY_PRINT);
 	}
 
+	function placep($x,$y,$token){
+		if($token==null || $token=='') {
+			header("HTTP/1.1 400 Bad Request");
+			print json_encode(['errormesg'=>"token is not set."]);
+			exit;
+		}
+
+		global $mysqli;
+		$sql = 'call `move_piece`(?,?);';
+		$st = $mysqli->prepare($sql);
+		$st->bind_param('ii',$x,$y);
+		$st->execute();
+
+		header('Content-type: application/json');
+		print json_encode(read_board(), JSON_PRETTY_PRINT);
+	}
+
+	// function do_move($x,$y) {
+	// 	global $mysqli;
+	// 	$sql = 'call `move_piece`(?,?);';
+	// 	$st = $mysqli->prepare($sql);
+	// 	$st->bind_param('ii',$x,$y );
+	// 	$st->execute();
+
+	// 	header('Content-type: application/json');
+	// 	print json_encode(read_board(), JSON_PRETTY_PRINT);
+	// }
 
 
+	
 
 	
 ?>
