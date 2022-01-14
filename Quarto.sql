@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 14, 2022 at 09:55 PM
+-- Generation Time: Jan 14, 2022 at 11:07 PM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.0.12
 
@@ -42,12 +42,14 @@ WHERE X=x2 AND Y=y2;
 UPDATE pieces_board
 SET selected='N',piece_height=NULL,piece_color=NULL,piece_shape=NULL,piece_hollow=NULL
 WHERE selected='Y';
+update game_status set round=IF(round='1','2','1');
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `select_piece` (`x1` TINYINT, `y1` TINYINT)  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `select_piece` (IN `x1` TINYINT, IN `y1` TINYINT)  BEGIN
 UPDATE pieces_board
 SET selected='Y'
 WHERE X=x1 AND Y=y1;
+update game_status set p_turn=if(p_turn='A','B','A'),round=IF(round='1','2','1');
 END$$
 
 DELIMITER ;
