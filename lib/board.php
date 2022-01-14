@@ -81,18 +81,6 @@
 		print json_encode(read_board(), JSON_PRETTY_PRINT);
 	}
 
-	// function do_move($x,$y) {
-	// 	global $mysqli;
-	// 	$sql = 'call `move_piece`(?,?);';
-	// 	$st = $mysqli->prepare($sql);
-	// 	$st->bind_param('ii',$x,$y );
-	// 	$st->execute();
-
-	// 	header('Content-type: application/json');
-	// 	print json_encode(read_board(), JSON_PRETTY_PRINT);
-	// }
-
-
 	
 
 	
