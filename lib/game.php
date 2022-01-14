@@ -34,6 +34,7 @@
         
         $new_status=null;
         $new_turn=null;
+        $new_round=null;
         
         $st3=$mysqli->prepare('select count(*) as aborted from players WHERE last_action< (NOW() - INTERVAL 5 MINUTE)');
         $st3->execute();
@@ -61,7 +62,8 @@
             case 1: $new_status='initialized'; break;
             case 2: $new_status='started'; 
                     if($status['p_turn']==null) {
-                        $new_turn='A'; // It was not started before...
+                        $new_turn='B'; 
+                        $new_round='1'
                     }
                     break;
         }
