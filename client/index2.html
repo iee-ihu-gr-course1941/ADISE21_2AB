@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>ADISE: Quarto</title>
+
+    <link href="myquarto.css" rel="stylesheet">
+    <script src="lib/jquery.min.js"></script>
+    <script src="myquarto.js"></script>
+    <script src="jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <link href="jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet">
+</head>
+<body style="background-color:black">
+    <h1 align="center" style="color:white">Quarto</h1>
+    <div id="quarto_board">
+    </div>
+    <br />
+    <div align="center" style="color:white" id="whole_move_div">
+        <div align="center" style="color:white" id="pick_div">
+            Pick Position (x y): <input id='pick_position'>  <button id='pick' class='btn btn-primary'>Done</button><br>
+        </div>
+        <div align="center" style="color:white" id="place_div">
+            Place Position (x y): <input id='place_position'>  <button id='place' class='btn btn-primary'>Done</button><br>
+        </div>
+        <div align="center" style="color:white" id="move_div">
+        </div>
+    </div>
+    <br />
+    <div id="pieces_board">
+    </div>
+    <br />
+    <div align="center" style="color:white" id='game_initializer'>
+        Username: <input id='username'>
+        <br>
+        I want to play:
+        <select id='pturn'>
+            <option value='A'>First</option>
+            <option value='B'>Second</option>
+        </select>
+        <br>
+        <button id='quarto_login' class='btn btn-primary'>Connect to Game</button><br>
+    </div>
+    <div align="center" id='game_info'>
+    </div>
+    <div style="text-align:center">
+        <button id="quarto_reset">Start</button>
+    </div>
+</body>
+</html>
