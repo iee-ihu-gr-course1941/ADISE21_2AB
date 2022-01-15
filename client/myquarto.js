@@ -105,6 +105,8 @@ function fill_pieces_board_by_data(data) {
 	 	o = data[i];
 	 	if (o.selected == 'Y') {
 	 		id = '#move_piece';
+			temp_id = '#square2_' + o.x + '_' + o.y;
+			$(temp_id).html('');
 	 	}
 	 	else {
 	 		id = '#square2_' + o.x + '_' + o.y;
