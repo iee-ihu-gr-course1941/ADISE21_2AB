@@ -38,6 +38,7 @@ function draw_empty_board(p) {
 	t += '</table>';
 
 	$('#quarto_board').html(t);
+	$('.square').click(click_on_piece_place);
 }
 
 function draw_pieces_board(p) {
@@ -59,6 +60,7 @@ function draw_pieces_board(p) {
 	t += '</table>';
 
 	$('#pieces_board').html(t);
+	$('.square2').click(click_on_piece_select);
 }
 
 function draw_move_board(p) {
@@ -153,10 +155,10 @@ function login_error(data, y, z, c) {
 function update_info() {
 	$('#game_info').html("I am Player: " + me.player + ", my name is " + me.username + '<br>Token=' + me.token + '<br>Game state: ' + game_status.status + ', ' + game_status.p_turn + ' must play now.');
 	if (game_status.round == '2') {
-		$('move_text').html("Here's a piece for you to put on the board: ");
+		$('#move_text').html("Here's a piece for you to put on the board: ");
 	}
 	else {
-		$('move_text').html("Choose a piece for your opponent!");
+		$('#move_text').html("Choose a piece for your opponent!");
     }
 }
 
@@ -246,3 +248,44 @@ function move_result2(data) {
 	game_status_update();
 	fill_pieces_board_by_data(data);
 }
+
+function click_on_piece_select(e) {
+	var o = e.target;
+	if (o.tagName != 'TD') { o = o.parentNode; }
+	if (o.tagName != 'TD') { return; }
+
+	var id = o.id;
+	var a = id.split(/_/);
+	$('#pick_position').val(a[1] + ' ' + a[2]);
+	$.ajax({
+		url: "quarto.php/pieces_board/select/",
+		method: 'PUT',
+		dataType: "json",
+		contentType: 'application/json',
+		data: JSON.stringify({ x: a[1], y: a[0] }),
+		headers: { "X-Token": me.token },
+		success: move_result2,
+		error: login_error
+	});
+}
+
+function click_on_piece_place(e) {
+	var o = e.target;
+	if (o.tagName != 'TD') { o = o.parentNode; }
+	if (o.tagName != 'TD') { return; }
+
+	var id = o.id;
+	var a = id.split(/_/);
+	$('#place_position').val(a[1] + ' ' + a[2]);
+	$.ajax({
+		url: "quarto.php/board/place/",
+		method: 'PUT',
+		dataType: "json",
+		contentType: 'application/json',
+		data: JSON.stringify({ x: a[1], y: a[0] }),
+		headers: { "X-Token": me.token },
+		success: move_result,
+		error: login_error
+	});
+}
+
