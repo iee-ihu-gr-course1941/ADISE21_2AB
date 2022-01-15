@@ -77,7 +77,7 @@ function fill_board() {
 }
 
 function reset_board() {
-	$.ajax({ url: "quarto.php/board/", headers: { "X-Token": me.token }, method: 'POST', success: fill_board_by_data, fill_pieces_board_by_data });
+	$.ajax({ url: "quarto.php/board/", headers: { "X-Token": me.token }, method: 'POST', success: game_status_update});
 	$('#move_div').hide();
 	$('#game_initializer').show(2000);
 }
@@ -262,7 +262,7 @@ function click_on_piece_select(e) {
 		method: 'PUT',
 		dataType: "json",
 		contentType: 'application/json',
-		data: JSON.stringify({ x: a[1], y: a[0] }),
+		data: JSON.stringify({ x: a[1], y: a[2] }),
 		headers: { "X-Token": me.token },
 		success: move_result2,
 		error: login_error
@@ -282,7 +282,7 @@ function click_on_piece_place(e) {
 		method: 'PUT',
 		dataType: "json",
 		contentType: 'application/json',
-		data: JSON.stringify({ x: a[1], y: a[0] }),
+		data: JSON.stringify({ x: a[1], y: a[2] }),
 		headers: { "X-Token": me.token },
 		success: move_result,
 		error: login_error
