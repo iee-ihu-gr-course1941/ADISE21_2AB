@@ -37,12 +37,12 @@ function set_user($b,$input) {
 	$r = $res->fetch_all(MYSQLI_ASSOC);
 	if($r[0]['c']>0) {
 		header("HTTP/1.1 400 Bad Request");
-		print json_encode(['errormesg'=>"Player $b is already set. Please select another player."]);
+		print json_encode(['errormesg'=>"Player $b is already set. Please select another position."]);
 		exit;
 	}
-	$sql = 'update players set username=?, token=md5(CONCAT( ?, NOW()))  where player=?';
+	$sql = 'insert into players (username,player,token) values (?,?,md5(CONCAT( ?, NOW())));';
 	$st2 = $mysqli->prepare($sql);
-	$st2->bind_param('sss',$username,$username,$b);
+	$st2->bind_param('sss',$username,$b,$username);
 	$st2->execute();
 
 

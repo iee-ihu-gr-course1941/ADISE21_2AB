@@ -41,7 +41,7 @@
         $res3 = $st3->get_result();
         $aborted = $res3->fetch_assoc()['aborted'];
         if($aborted>0) {
-            $sql = "UPDATE players SET username=NULL, token=NULL WHERE last_action< (NOW() - INTERVAL 5 MINUTE)";
+            $sql = "delete from players WHERE last_action< (NOW() - INTERVAL 5 MINUTE)";
             $st2 = $mysqli->prepare($sql);
             $st2->execute();
             if($status['status']=='started') {
@@ -63,7 +63,7 @@
             case 2: $new_status='started'; 
                     if($status['p_turn']==null) {
                         $new_turn='B'; 
-                        $new_round='1'
+                        $new_round='1';
                     }
                     break;
         }
