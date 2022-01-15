@@ -68,9 +68,9 @@
                     break;
         }
 
-        $sql = 'update game_status set status=?, p_turn=?';
+        $sql = 'update game_status set status=?, p_turn=?, round=?';
         $st = $mysqli->prepare($sql);
-        $st->bind_param('ss',$new_status,$new_turn);
+        $st->bind_param('ssi',$new_status,$new_turn,$new_round);
         $st->execute();
         
         
