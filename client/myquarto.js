@@ -171,13 +171,10 @@ function update_status(data) {
 	game_status = data[0];
 	update_info();
 	clearTimeout(timer);
+	fill_board();
+	fill_pieces_board();
 	if (game_status.p_turn == me.player && me.player != null) {
 		x = 0;
-		// do play
-		if (game_stat_old.p_turn != game_status.p_turn) {
-			fill_board();
-			fill_pieces_board();
-		}
 		$('#whole_move_div').show(1000);
 		if (game_status.round == '1') {
 			$('#pick_div').show(1000);
@@ -213,7 +210,7 @@ function select() {
 		contentType: 'application/json',
 		data: JSON.stringify({ x: a[0], y: a[1] }),
 		headers: { "X-Token": me.token },
-		success: move_result,
+		success: move_result2,
 		error: login_error
 	});
 
@@ -243,5 +240,9 @@ function place() {
 function move_result(data) {
 	game_status_update();
 	fill_board_by_data(data);
-	fill_pieces_board_by_data;
+}
+
+function move_result2(data) {
+	game_status_update();
+	fill_pieces_board_by_data(data);
 }

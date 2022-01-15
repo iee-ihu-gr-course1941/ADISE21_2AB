@@ -61,7 +61,7 @@
 		$st->execute();
 
 		header('Content-type: application/json');
-		print json_encode(read_board(), JSON_PRETTY_PRINT);
+		print json_encode(read_pieces_board(), JSON_PRETTY_PRINT);
 	}
 
 	function placep($x,$y,$token){
