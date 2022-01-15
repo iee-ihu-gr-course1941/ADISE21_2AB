@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 14, 2022 at 11:07 PM
+-- Generation Time: Jan 15, 2022 at 01:24 AM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.0.12
 
@@ -75,7 +75,7 @@ CREATE TABLE `board` (
 --
 
 INSERT INTO `board` (`x`, `y`, `piece_color`, `piece_height`, `piece_shape`, `piece_hollow`, `game_id`) VALUES
-(1, 1, NULL, NULL, NULL, NULL, 0),
+(1, 1, 'W', 'S', 'S', 'N', 0),
 (1, 2, NULL, NULL, NULL, NULL, 0),
 (1, 3, NULL, NULL, NULL, NULL, 0),
 (1, 4, NULL, NULL, NULL, NULL, 0),
@@ -85,7 +85,7 @@ INSERT INTO `board` (`x`, `y`, `piece_color`, `piece_height`, `piece_shape`, `pi
 (2, 4, NULL, NULL, NULL, NULL, 0),
 (3, 1, NULL, NULL, NULL, NULL, 0),
 (3, 2, NULL, NULL, NULL, NULL, 0),
-(3, 3, NULL, NULL, NULL, NULL, 0),
+(3, 3, 'B', 'S', 'S', 'N', 0),
 (3, 4, NULL, NULL, NULL, NULL, 0),
 (4, 1, NULL, NULL, NULL, NULL, 0),
 (4, 2, NULL, NULL, NULL, NULL, 0),
@@ -194,6 +194,13 @@ CREATE TABLE `game_status` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
+-- Dumping data for table `game_status`
+--
+
+INSERT INTO `game_status` (`status`, `p_turn`, `round`, `result`, `last_change`) VALUES
+('not active', 'A', '2', NULL, '2022-01-14 23:17:35');
+
+--
 -- Triggers `game_status`
 --
 DELIMITER $$
@@ -225,17 +232,16 @@ CREATE TABLE `pieces_board` (
 --
 
 INSERT INTO `pieces_board` (`x`, `y`, `piece_color`, `piece_height`, `piece_shape`, `piece_hollow`, `selected`, `game_id`) VALUES
-(1, 1, 'W', 'T', 'S', 'N', 'N', 0),
 (1, 2, 'W', 'T', 'S', 'Y', 'N', 0),
 (1, 3, 'W', 'S', 'S', 'N', 'N', 0),
 (1, 4, 'W', 'S', 'S', 'Y', 'N', 0),
 (1, 5, 'W', 'T', 'C', 'N', 'N', 0),
 (1, 6, 'W', 'T', 'C', 'Y', 'N', 0),
-(1, 7, 'W', 'S', 'C', 'N', 'N', 0),
+(1, 7, NULL, 'S', 'C', 'N', 'N', 0),
 (1, 8, 'W', 'S', 'C', 'Y', 'N', 0),
 (2, 1, 'B', 'T', 'S', 'N', 'N', 0),
 (2, 2, 'B', 'T', 'S', 'Y', 'N', 0),
-(2, 3, 'B', 'S', 'S', 'N', 'N', 0),
+(2, 3, NULL, NULL, NULL, NULL, 'N', 0),
 (2, 4, 'B', 'S', 'S', 'Y', 'N', 0),
 (2, 5, 'B', 'T', 'C', 'N', 'N', 0),
 (2, 6, 'B', 'T', 'C', 'Y', 'N', 0),
@@ -250,7 +256,6 @@ INSERT INTO `pieces_board` (`x`, `y`, `piece_color`, `piece_height`, `piece_shap
 
 CREATE TABLE `players` (
   `username` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_nopad_ci DEFAULT NULL,
-  `game_id` int(20) NOT NULL,
   `player` enum('A','B') NOT NULL,
   `token` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -287,7 +292,7 @@ ALTER TABLE `pieces_board`
 -- Indexes for table `players`
 --
 ALTER TABLE `players`
-  ADD PRIMARY KEY (`game_id`,`player`);
+  ADD PRIMARY KEY (`player`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
