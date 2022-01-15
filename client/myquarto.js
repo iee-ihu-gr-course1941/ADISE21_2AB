@@ -14,7 +14,7 @@ $(function () {
 	$('#pick').click(select);
 	$('#place').click(place);
 	$('#quarto_login').click(login_to_game);
-	//$('#quarto_reset').click(reset_board);
+	$('#quarto_reset').click(reset_board);
 	$('#whole_move_div').hide();
 	game_status_update();
 });
@@ -72,6 +72,12 @@ function fill_board() {
 		headers: {"X-Token": me.token},
 		success: fill_board_by_data
 	});
+}
+
+function reset_board() {
+	$.ajax({ url: "quarto.php/board/", headers: { "X-Token": me.token }, method: 'POST', success: fill_board_by_data, fill_pieces_board_by_data });
+	$('#move_div').hide();
+	$('#game_initializer').show(2000);
 }
 
 function fill_pieces_board() {
@@ -168,6 +174,7 @@ function update_status(data) {
 		// do play
 		if (game_stat_old.p_turn != game_status.p_turn) {
 			fill_board();
+			fill_pieces_board();
 		}
 		$('#whole_move_div').show(1000);
 		if (game_status.round == '1') {
@@ -232,4 +239,5 @@ function place() {
 function move_result(data) {
 	game_status_update();
 	fill_board_by_data(data);
+	fill_pieces_board_by_data;
 }
