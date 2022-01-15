@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 15, 2022 at 01:24 AM
--- Server version: 10.4.21-MariaDB
--- PHP Version: 8.0.12
+-- Generation Time: Jan 15, 2022 at 07:28 PM
+-- Server version: 10.4.22-MariaDB
+-- PHP Version: 8.1.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -27,7 +27,7 @@ DELIMITER $$
 --
 CREATE DEFINER=`root`@`localhost` PROCEDURE `clean_board` ()  BEGIN
 REPLACE INTO board SELECT * FROM empty_board;
-UPDATE `players` SET `username`=null;
+DELETE FROM `players`;
 UPDATE `game_status` SET `status`='not active', `p_turn`=null, `result`=null;
 REPLACE INTO pieces_board SELECT * FROM full_pieces_board;
 END$$
@@ -75,7 +75,7 @@ CREATE TABLE `board` (
 --
 
 INSERT INTO `board` (`x`, `y`, `piece_color`, `piece_height`, `piece_shape`, `piece_hollow`, `game_id`) VALUES
-(1, 1, 'W', 'S', 'S', 'N', 0),
+(1, 1, NULL, NULL, NULL, NULL, 0),
 (1, 2, NULL, NULL, NULL, NULL, 0),
 (1, 3, NULL, NULL, NULL, NULL, 0),
 (1, 4, NULL, NULL, NULL, NULL, 0),
@@ -85,7 +85,7 @@ INSERT INTO `board` (`x`, `y`, `piece_color`, `piece_height`, `piece_shape`, `pi
 (2, 4, NULL, NULL, NULL, NULL, 0),
 (3, 1, NULL, NULL, NULL, NULL, 0),
 (3, 2, NULL, NULL, NULL, NULL, 0),
-(3, 3, 'B', 'S', 'S', 'N', 0),
+(3, 3, NULL, NULL, NULL, NULL, 0),
 (3, 4, NULL, NULL, NULL, NULL, 0),
 (4, 1, NULL, NULL, NULL, NULL, 0),
 (4, 2, NULL, NULL, NULL, NULL, 0),
@@ -198,7 +198,7 @@ CREATE TABLE `game_status` (
 --
 
 INSERT INTO `game_status` (`status`, `p_turn`, `round`, `result`, `last_change`) VALUES
-('not active', 'A', '2', NULL, '2022-01-14 23:17:35');
+('not active', NULL, '2', NULL, '2022-01-15 18:27:06');
 
 --
 -- Triggers `game_status`
@@ -232,16 +232,17 @@ CREATE TABLE `pieces_board` (
 --
 
 INSERT INTO `pieces_board` (`x`, `y`, `piece_color`, `piece_height`, `piece_shape`, `piece_hollow`, `selected`, `game_id`) VALUES
+(1, 1, 'W', 'T', 'S', 'N', 'N', 0),
 (1, 2, 'W', 'T', 'S', 'Y', 'N', 0),
 (1, 3, 'W', 'S', 'S', 'N', 'N', 0),
 (1, 4, 'W', 'S', 'S', 'Y', 'N', 0),
 (1, 5, 'W', 'T', 'C', 'N', 'N', 0),
 (1, 6, 'W', 'T', 'C', 'Y', 'N', 0),
-(1, 7, NULL, 'S', 'C', 'N', 'N', 0),
+(1, 7, 'W', 'S', 'C', 'N', 'N', 0),
 (1, 8, 'W', 'S', 'C', 'Y', 'N', 0),
 (2, 1, 'B', 'T', 'S', 'N', 'N', 0),
 (2, 2, 'B', 'T', 'S', 'Y', 'N', 0),
-(2, 3, NULL, NULL, NULL, NULL, 'N', 0),
+(2, 3, 'B', 'S', 'S', 'N', 'N', 0),
 (2, 4, 'B', 'S', 'S', 'Y', 'N', 0),
 (2, 5, 'B', 'T', 'C', 'N', 'N', 0),
 (2, 6, 'B', 'T', 'C', 'Y', 'N', 0),
@@ -257,7 +258,8 @@ INSERT INTO `pieces_board` (`x`, `y`, `piece_color`, `piece_height`, `piece_shap
 CREATE TABLE `players` (
   `username` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_nopad_ci DEFAULT NULL,
   `player` enum('A','B') NOT NULL,
-  `token` varchar(100) DEFAULT NULL
+  `token` varchar(100) DEFAULT NULL,
+  `last_action` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --

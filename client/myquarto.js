@@ -179,11 +179,13 @@ function update_status(data) {
 		$('#whole_move_div').show(1000);
 		if (game_status.round == '1') {
 			$('#pick_div').show(1000);
-			$('#select_div').hide(1000);
+			$('#place_div').hide(1000);
+			$('#move_div').hide(1000);
 		}
 		else {
 			$('#pick_div').hide(1000);
-			$('#select_div').show(1000);
+			$('#place_div').show(1000);
+			$('#move_div').show(1000);
         }
 		timer = setTimeout(function () { game_status_update(); }, 15000);
 	} else {
