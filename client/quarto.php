@@ -30,7 +30,7 @@
 		case 'pieces_board' :
 			switch ($b=array_shift($request)) {
                 case '':
-                case null: handle_board($method);
+                case null: handle_pieces_board($method);
                             break;
 				case 'select': select_piece($method,$input);
                             break;}
@@ -39,7 +39,7 @@
 			if(sizeof($request)==0) {show_status();}
 			else {header("HTTP/1.1 404 Not Found");}
 			break;
-		case 'players' :
+		case 'players' :handle_player($method, $request,$input);
 			break;
 		default: header("HTTP/1.1 404 Not Found");
 			exit;
@@ -49,10 +49,19 @@
 
         if($method=='GET') {
                 show_board();
-				show_pieces_board();
         } else if ($method=='POST') {
                 reset_board();
 				show_board();
+        }
+
+	}
+
+	function handle_pieces_board($method) {
+
+        if($method=='GET') {
+				show_pieces_board();
+        } else if ($method=='POST') {
+                reset_board();
 				show_pieces_board();
         }
 
@@ -60,9 +69,8 @@
 
 	function handle_player($method, $p,$input) {
 		switch ($b=array_shift($p)) {
-		        break;
-			case 'B': 
-			case 'W': handle_user($method, $b,$input);
+			case 'A': 
+			case 'B': handle_user($method, $b,$input);
 				break;
 			default: header("HTTP/1.1 404 Not Found");
 					 print json_encode(['errormesg'=>"Player $b not found."]);

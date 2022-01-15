@@ -9,11 +9,12 @@ $(function () {
 	draw_pieces_board();
 	draw_move_board();
 	fill_board();
+	fill_pieces_board();
 
 	$('#pick').click(select);
 	$('#place').click(place);
 	$('#quarto_login').click(login_to_game);
-	$('#quarto_reset').click(reset_board);
+	//$('#quarto_reset').click(reset_board);
 	$('#whole_move_div').hide();
 	game_status_update();
 });
@@ -68,30 +69,43 @@ function draw_move_board(p) {
 function fill_board() {
 	$.ajax({
 		url: "quarto.php/board/",
+		headers: {"X-Token": me.token},
 		success: fill_board_by_data
+	});
+}
+
+function fill_pieces_board() {
+	$.ajax({
+		url: "quarto.php/pieces_board/",
+		headers: {"X-Token": me.token},
+		success: fill_pieces_board_by_data
 	});
 }
 
 function fill_board_by_data(data) {
 	board = data;
-	for (var i = 0; i < 16; i++) {
+	for (var i = 0; i < data.length; i++) {
 		var o = data[i];
 		var id = '#square_' + o.x + '_' + o.y;
 		var c = (o.piece_color != null) ? o.piece_color + o.piece_height + o.piece_shape + o.piece_hollow : '';
-		var im = (o.piece_color != null) ? '<img src="images/' + c + '.png">' : '<img src="images/p-1.jpg">';
+		var im = (o.piece_color != null) ? '<img src="images/' + c + '.jpg">' : '<img src="images/p-1.jpg">';
 		$(id).html(im);
 	}
-	for (var i = 16; i < data.length; i++) {
-		o = data[i];
-		if (o.selected == 'Y') {
-			id = '#move_piece';
-		}
-		else {
-			id = '#square2_' + o.x + '_' + o.y;
-        }
-		c = (o.piece_color != null) ? o.piece_color + o.piece_height + o.piece_shape + o.piece_hollow : '';
-		im = (o.piece_color != null) ? '<img src="images/' + c + '.png">' : '';
-		$(id).html(im);
+}
+
+function fill_pieces_board_by_data(data) {
+	board = data;
+	 for (var i = 0; i < data.length; i++) {
+	 	o = data[i];
+	 	if (o.selected == 'Y') {
+	 		id = '#move_piece';
+	 	}
+	 	else {
+	 		id = '#square2_' + o.x + '_' + o.y;
+         }
+	 	c = (o.piece_color != null) ? o.piece_color + o.piece_height + o.piece_shape + o.piece_hollow : '';
+	 	im = (o.piece_color != null) ? '<img src="images/' + c + '.jpg">' : '';
+	 	$(id).html(im);
 	}
 }
 
@@ -101,8 +115,8 @@ function login_to_game() {
 		return;
 	}
 	var p_turn = $('#pturn').val();
-	draw_empty_board(p_turn);
 	fill_board();
+	fill_pieces_board();
 
 	$.ajax({
 		url: "quarto.php/players/" + p_turn,
@@ -110,7 +124,7 @@ function login_to_game() {
 		dataType: "json",
 		headers: { "X-Token": me.token },
 		contentType: 'application/json',
-		data: JSON.stringify({ username: $('#username').val(), player: p_turn }),
+		data: JSON.stringify( {username: $('#username').val(), player: p_turn}),
 		success: login_result,
 		error: login_error
 	});
