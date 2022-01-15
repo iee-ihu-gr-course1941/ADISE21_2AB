@@ -242,6 +242,7 @@ function place() {
 function move_result(data) {
 	game_status_update();
 	fill_board_by_data(data);
+	win_condition();
 }
 
 function move_result2(data) {
