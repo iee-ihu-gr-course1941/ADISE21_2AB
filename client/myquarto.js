@@ -289,3 +289,54 @@ function click_on_piece_place(e) {
 	});
 }
 
+function win_condition(){
+	$.ajax({
+		url: "quarto.php/board/",
+		headers: {"X-Token": me.token},
+		success: win_condition_by_data
+	});
+}
+
+function win_condition_by_data(data){
+	board=data;
+	var c,h,w,s=0;
+	var win=true;
+	//edw eksetazw ton aksona X
+	for(var x=0;x<16;x=x+4){
+		if (data[x].piece_color==null) continue;
+
+		for(var y=1;y<4;y++){
+			if(data[x].piece_color==data[y+x].piece_color){
+				c=c+1;
+			}else if(data[x].piece_height==data[y+x].piece_height){
+				h=h+1;
+			}else if(data[x].piece_hollow==data[y+x].piece_hollow){
+				w=w+1;
+			}else if(data[x].piece_shape==data[y+x].piece_shape){
+				s=s+1;
+			}
+			
+			if(c<y && h<y && w<y && s<y) win=false; break;
+		}
+	}
+
+	//edw eksetazw ton aksona Y
+	for(var x=0;x<4;x++){
+		if (data[x].piece_color==null) continue;
+
+		for(var y=4;y<16;y=y+4){
+			if(data[x].piece_color==data[y].piece_color){
+				c=c+1;
+			}else if(data[x].piece_height==data[y].piece_height){
+				h=h+1;
+			}else if(data[x].piece_hollow==data[y].piece_hollow){
+				w=w+1;
+			}else if(data[x].piece_shape==data[y].piece_shape){
+				s=s+1;
+			}
+			if(c<y && h<y && w<y && s<y) win=false; break;
+		}
+	}
+
+	if(win) alert("win");
+}
