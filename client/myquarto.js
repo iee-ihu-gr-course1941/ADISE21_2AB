@@ -300,11 +300,14 @@ function win_condition(){
 
 function win_condition_by_data(data){
 	board=data;
-	var c,h,w,s=0;
-	var win=true;
+	var c,h,w,s;
+	var win;
 	//edw eksetazw ton aksona X
 	for(var x=0;x<16;x=x+4){
+
+		var c=0,h=0,w=0,s=0;
 		if (data[x].piece_color==null) continue;
+		win=true;
 
 		for(var y=1;y<4;y++){
 			if(data[x].piece_color==data[y+x].piece_color){
@@ -316,14 +319,16 @@ function win_condition_by_data(data){
 			}else if(data[x].piece_shape==data[y+x].piece_shape){
 				s=s+1;
 			}
-			
 			if(c<y && h<y && w<y && s<y) win=false; break;
 		}
 	}
 
 	//edw eksetazw ton aksona Y
 	for(var x=0;x<4;x++){
+		
+		var c=0,h=0,w=0,s=0;
 		if (data[x].piece_color==null) continue;
+		win=true;
 
 		for(var y=4;y<16;y=y+4){
 			if(data[x].piece_color==data[y].piece_color){
@@ -339,5 +344,5 @@ function win_condition_by_data(data){
 		}
 	}
 
-	if(win) alert("win");
+	if(win) alert("c="+c+" h="+h+" w="+w+" s="+s);
 }
