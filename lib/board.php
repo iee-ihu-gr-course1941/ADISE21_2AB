@@ -79,6 +79,58 @@
 
 		header('Content-type: application/json');
 		print json_encode(read_board(), JSON_PRETTY_PRINT);
+
+		win_condition($x,$y,$token);
+	}
+
+	function win_condition($x,$y,$token) {
+		$orig_board=read_board();
+		$board=convert_board($orig_board);
+		$c = $board[$x][$y]['piece_color'];
+		$h = $board[$x][$y]['piece_height'];
+		$s = $board[$x][$y]['piece_shape'];
+		$w = $board[$x][$y]['piece_hollow'];
+		$sumC=0;
+		$sumH=0;
+		$sumS=0;
+		$sumW=0;
+		for($i=1; $i<5; $i++) {
+			$continue = false;
+			if($board[$x][$i]['piece_color']==$c) {
+				$sumC++;
+				$continue = true;
+			}
+			if($board[$x][$i]['piece_height']==$h) {
+				$sumH++;
+				$continue = true;
+			}
+			if($board[$x][$i]['piece_shape']==$s) {
+				$sumS++;
+				$continue = true;
+			}
+			if($board[$x][$i]['piece_hollow']==$w) {
+				$sumW++;
+				$continue = true;
+			}
+			if(!$continue) break;
+		}
+
+		// for($i=1; $i<5; $i++) {
+		// 	if($board[$i][$y]['piece_color']==$c) {
+		// 		$sum++;
+		// 	}
+		// 	else {
+		// 		break;
+		// 	}
+		// }
+		
+		if($sumC==4 || $sumH==4 || $sumS==4 || $sumW==4) {
+			global $mysqli;
+			$sql = 'call victory(?)';
+			$st = $mysqli->prepare($sql);
+			$st->bind_param('s', $token);
+			$st->execute();
+		}
 	}
 
 	
