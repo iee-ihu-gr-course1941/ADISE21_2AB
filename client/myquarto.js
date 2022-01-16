@@ -38,7 +38,7 @@ function draw_empty_board(p) {
 	t += '</table>';
 
 	$('#quarto_board').html(t);
-	$('.square').click(click_on_piece_place);
+	//$('.square').click(click_on_piece_place);
 }
 
 function draw_pieces_board(p) {
@@ -60,7 +60,7 @@ function draw_pieces_board(p) {
 	t += '</table>';
 
 	$('#pieces_board').html(t);
-	$('.square2').click(click_on_piece_select);
+	//$('.square2').click(click_on_piece_select);
 }
 
 function draw_move_board(p) {
@@ -179,11 +179,13 @@ function update_status(data) {
 		x = 0;
 		$('#whole_move_div').show(1000);
 		if (game_status.round == '1') {
+			$('.square2').on("click", click_on_piece_select);
 			$('#pick_div').show(1000);
 			$('#place_div').hide(1000);
 			$('#move_div').hide(1000);
 		}
 		else {
+			$('.square').on("click", click_on_piece_place);
 			$('#pick_div').hide(1000);
 			$('#place_div').show(1000);
 			$('#move_div').show(1000);
@@ -240,12 +242,13 @@ function place() {
 }
 
 function move_result(data) {
+	$('.square').off("click");
 	game_status_update();
 	fill_board_by_data(data);
-	win_condition();
 }
 
 function move_result2(data) {
+	$('.square2').off("click");
 	game_status_update();
 	fill_pieces_board_by_data(data);
 }
@@ -288,61 +291,4 @@ function click_on_piece_place(e) {
 		success: move_result,
 		error: login_error
 	});
-}
-
-function win_condition(){
-	$.ajax({
-		url: "quarto.php/board/",
-		headers: {"X-Token": me.token},
-		success: win_condition_by_data
-	});
-}
-
-function win_condition_by_data(data){
-	board=data;
-	var c,h,w,s;
-	var win;
-	//edw eksetazw ton aksona X
-	for(var x=0;x<16;x=x+4){
-
-		var c=0,h=0,w=0,s=0;
-		if (data[x].piece_color==null) continue;
-		win=true;
-
-		for(var y=1;y<4;y++){
-			if(data[x].piece_color==data[y+x].piece_color){
-				c=c+1;
-			}else if(data[x].piece_height==data[y+x].piece_height){
-				h=h+1;
-			}else if(data[x].piece_hollow==data[y+x].piece_hollow){
-				w=w+1;
-			}else if(data[x].piece_shape==data[y+x].piece_shape){
-				s=s+1;
-			}
-			if(c<y && h<y && w<y && s<y) win=false; break;
-		}
-	}
-
-	//edw eksetazw ton aksona Y
-	for(var x=0;x<4;x++){
-		
-		var c=0,h=0,w=0,s=0;
-		if (data[x].piece_color==null) continue;
-		win=true;
-
-		for(var y=4;y<16;y=y+4){
-			if(data[x].piece_color==data[y].piece_color){
-				c=c+1;
-			}else if(data[x].piece_height==data[y].piece_height){
-				h=h+1;
-			}else if(data[x].piece_hollow==data[y].piece_hollow){
-				w=w+1;
-			}else if(data[x].piece_shape==data[y].piece_shape){
-				s=s+1;
-			}
-			if(c<y && h<y && w<y && s<y) win=false; break;
-		}
-	}
-
-	if(win) alert("c="+c+" h="+h+" w="+w+" s="+s);
 }
