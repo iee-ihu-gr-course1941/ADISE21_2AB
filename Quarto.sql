@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 15, 2022 at 07:28 PM
+-- Generation Time: Jan 16, 2022 at 03:32 AM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.1
 
@@ -52,6 +52,14 @@ WHERE X=x1 AND Y=y1;
 update game_status set p_turn=if(p_turn='A','B','A'),round=IF(round='1','2','1');
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `victory` (IN `tok` VARCHAR(100))  BEGIN
+DECLARE winner CHAR;
+SELECT player INTO winner
+FROM players WHERE token=tok;
+UPDATE game_status
+SET result=winner, status='ended';
+END$$
+
 DELIMITER ;
 
 -- --------------------------------------------------------
@@ -75,22 +83,22 @@ CREATE TABLE `board` (
 --
 
 INSERT INTO `board` (`x`, `y`, `piece_color`, `piece_height`, `piece_shape`, `piece_hollow`, `game_id`) VALUES
-(1, 1, NULL, NULL, NULL, NULL, 0),
+(1, 1, 'W', 'S', 'S', 'N', 0),
 (1, 2, NULL, NULL, NULL, NULL, 0),
 (1, 3, NULL, NULL, NULL, NULL, 0),
 (1, 4, NULL, NULL, NULL, NULL, 0),
 (2, 1, NULL, NULL, NULL, NULL, 0),
-(2, 2, NULL, NULL, NULL, NULL, 0),
+(2, 2, 'W', 'S', 'S', 'Y', 0),
 (2, 3, NULL, NULL, NULL, NULL, 0),
 (2, 4, NULL, NULL, NULL, NULL, 0),
 (3, 1, NULL, NULL, NULL, NULL, 0),
 (3, 2, NULL, NULL, NULL, NULL, 0),
-(3, 3, NULL, NULL, NULL, NULL, 0),
+(3, 3, 'W', 'T', 'S', 'Y', 0),
 (3, 4, NULL, NULL, NULL, NULL, 0),
 (4, 1, NULL, NULL, NULL, NULL, 0),
 (4, 2, NULL, NULL, NULL, NULL, 0),
 (4, 3, NULL, NULL, NULL, NULL, 0),
-(4, 4, NULL, NULL, NULL, NULL, 0);
+(4, 4, 'W', 'T', 'S', 'N', 0);
 
 -- --------------------------------------------------------
 
@@ -186,7 +194,7 @@ CREATE TABLE `game` (
 --
 
 CREATE TABLE `game_status` (
-  `status` enum('not active','initialized','started','\r\nended','aborded') NOT NULL DEFAULT 'not active',
+  `status` enum('not active','initialized','started','ended','aborded') NOT NULL DEFAULT 'not active',
   `p_turn` enum('A','B') DEFAULT NULL,
   `round` enum('1','2') DEFAULT NULL,
   `result` enum('A','B','D') DEFAULT NULL,
@@ -198,7 +206,7 @@ CREATE TABLE `game_status` (
 --
 
 INSERT INTO `game_status` (`status`, `p_turn`, `round`, `result`, `last_change`) VALUES
-('not active', NULL, '2', NULL, '2022-01-15 18:27:06');
+('aborded', NULL, '1', 'A', '2022-01-16 02:31:34');
 
 --
 -- Triggers `game_status`
@@ -232,11 +240,11 @@ CREATE TABLE `pieces_board` (
 --
 
 INSERT INTO `pieces_board` (`x`, `y`, `piece_color`, `piece_height`, `piece_shape`, `piece_hollow`, `selected`, `game_id`) VALUES
-(1, 1, 'W', 'T', 'S', 'N', 'N', 0),
-(1, 2, 'W', 'T', 'S', 'Y', 'N', 0),
-(1, 3, 'W', 'S', 'S', 'N', 'N', 0),
-(1, 4, 'W', 'S', 'S', 'Y', 'N', 0),
-(1, 5, 'W', 'T', 'C', 'N', 'N', 0),
+(1, 1, NULL, NULL, NULL, NULL, 'N', 0),
+(1, 2, NULL, NULL, NULL, NULL, 'N', 0),
+(1, 3, NULL, NULL, NULL, NULL, 'N', 0),
+(1, 4, NULL, NULL, NULL, NULL, 'N', 0),
+(1, 5, 'W', 'T', 'C', 'N', 'Y', 0),
 (1, 6, 'W', 'T', 'C', 'Y', 'N', 0),
 (1, 7, 'W', 'S', 'C', 'N', 'N', 0),
 (1, 8, 'W', 'S', 'C', 'Y', 'N', 0),
@@ -261,6 +269,14 @@ CREATE TABLE `players` (
   `token` varchar(100) DEFAULT NULL,
   `last_action` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `players`
+--
+
+INSERT INTO `players` (`username`, `player`, `token`, `last_action`) VALUES
+('a', 'A', '4d7f6def3c1773485eedd182cd8b7332', NULL),
+('b', 'B', 'b81824037ee5af774dba28e08f866e91', NULL);
 
 --
 -- Indexes for dumped tables
