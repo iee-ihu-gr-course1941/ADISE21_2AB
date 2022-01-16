@@ -173,11 +173,15 @@ function update_status(data) {
 	last_update = new Date().getTime();
 	var game_stat_old = game_status;
 	game_status = data[0];
+	if (game_status.result != null) {
+		alert('Player' + game_status.result + 'won!');
+
+    }
 	update_info();
 	clearTimeout(timer);
 	fill_board();
 	fill_pieces_board();
-	if (game_status.p_turn == me.player && me.player != null) {
+	if (game_status.p_turn == me.player && me.player != null && game_status.result != null) {
 		x = 0;
 		$('#whole_move_div').show(1000);
 		if (game_status.round == '1') {
