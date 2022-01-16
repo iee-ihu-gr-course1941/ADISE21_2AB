@@ -3,6 +3,7 @@ var game_status = {};
 var board = {};
 var last_update = new Date().getTime();
 var timer = null;
+var flag=false;
 
 $(function () {
 	draw_empty_board();
@@ -81,6 +82,7 @@ function reset_board() {
 	$.ajax({ url: "quarto.php/board/", headers: { "X-Token": me.token }, method: 'POST', success: game_status_update});
 	$('#move_div').hide();
 	$('#game_initializer').show(2000);
+	flag=false;
 }
 
 function fill_pieces_board() {
@@ -173,15 +175,15 @@ function update_status(data) {
 	last_update = new Date().getTime();
 	var game_stat_old = game_status;
 	game_status = data[0];
-	if (game_status.result != null) {
-		alert('Player' + game_status.result + 'won!');
-
+	if (game_status.result != null && flag==false) {
+		alert('Player ' + game_status.result + ' won!');
+		flag=true;
     }
 	update_info();
 	clearTimeout(timer);
 	fill_board();
 	fill_pieces_board();
-	if (game_status.p_turn == me.player && me.player != null && game_status.result != null) {
+	if (game_status.p_turn == me.player && me.player != null && game_status.result == null) {
 		x = 0;
 		$('#whole_move_div').show(1000);
 		if (game_status.round == '1') {
