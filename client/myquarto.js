@@ -16,6 +16,7 @@ $(function () {
 	$('#quarto_login').click(login_to_game);
 	$('#quarto_reset').click(reset_board);
 	$('#whole_move_div').hide();
+	$('#game_info').hide();
 	game_status_update();
 });
 
@@ -142,7 +143,8 @@ function login_to_game() {
 
 function login_result(data) {
 	me = data[0];
-	$('#game_initializer').hide();
+	$('#game_initializer').hide(1000);
+	$('#game_info').show(1000);
 	update_info();
 	game_status_update();
 }
@@ -180,15 +182,15 @@ function update_status(data) {
 		$('#whole_move_div').show(1000);
 		if (game_status.round == '1') {
 			$('.square2').on("click", click_on_piece_select);
-			$('#pick_div').show(1000);
-			$('#place_div').hide(1000);
-			$('#move_div').hide(1000);
+			$('#pick_div').show();
+			$('#place_div').hide();
+			$('#move_div').hide();
 		}
 		else {
 			$('.square').on("click", click_on_piece_place);
-			$('#pick_div').hide(1000);
-			$('#place_div').show(1000);
-			$('#move_div').show(1000);
+			$('#pick_div').hide();
+			$('#place_div').show();
+			$('#move_div').show();
         }
 		timer = setTimeout(function () { game_status_update(); }, 15000);
 	} else {
