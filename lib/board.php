@@ -115,15 +115,87 @@
 			if(!$continue) break;
 		}
 
-		// for($i=1; $i<5; $i++) {
-		// 	if($board[$i][$y]['piece_color']==$c) {
-		// 		$sum++;
-		// 	}
-		// 	else {
-		// 		break;
-		// 	}
-		// }
-		
+		if(!($sumC==4 || $sumH==4 || $sumS==4 || $sumW==4)) {
+			$sumC=0;
+			$sumH=0;
+			$sumS=0;
+			$sumW=0;
+			for($i=1; $i<5; $i++) {
+				$continue = false;
+				if($board[$i][$y]['piece_color']==$c) {
+					$sumC++;
+					$continue = true;
+				}
+				if($board[$i][$y]['piece_height']==$h) {
+					$sumH++;
+					$continue = true;
+				}
+				if($board[$i][$y]['piece_shape']==$s) {
+					$sumS++;
+					$continue = true;
+				}
+				if($board[$i][$y]['piece_hollow']==$w) {
+					$sumW++;
+					$continue = true;
+				}
+				if(!$continue) break;
+			}
+		}
+
+		if(!($sumC==4 || $sumH==4 || $sumS==4 || $sumW==4) && $x==$y) {
+			$sumC=0;
+			$sumH=0;
+			$sumS=0;
+			$sumW=0;
+			for($i=1; $i<5; $i++) {
+				$continue = false;
+				if($board[$i][$i]['piece_color']==$c) {
+					$sumC++;
+					$continue = true;
+				}
+				if($board[$i][$i]['piece_height']==$h) {
+					$sumH++;
+					$continue = true;
+				}
+				if($board[$i][$i]['piece_shape']==$s) {
+					$sumS++;
+					$continue = true;
+				}
+				if($board[$i][$i]['piece_hollow']==$w) {
+					$sumW++;
+					$continue = true;
+				}
+				if(!$continue) break;
+			}
+		}
+
+		if(!($sumC==4 || $sumH==4 || $sumS==4 || $sumW==4) && $x+$y==5) {
+			$sumC=0;
+			$sumH=0;
+			$sumS=0;
+			$sumW=0;
+			for($i=1; $i<5; $i++) {
+				$continue = false;
+				if($board[$i][5-$i]['piece_color']==$c) {
+					$sumC++;
+					$continue = true;
+				}
+				if($board[$i][5-$i]['piece_height']==$h) {
+					$sumH++;
+					$continue = true;
+				}
+				if($board[$i][5-$i]['piece_shape']==$s) {
+					$sumS++;
+					$continue = true;
+				}
+				if($board[$i][5-$i]['piece_hollow']==$w) {
+					$sumW++;
+					$continue = true;
+				}
+				if(!$continue) break;
+			}
+		}
+
 		if($sumC==4 || $sumH==4 || $sumS==4 || $sumW==4) {
 			global $mysqli;
 			$sql = 'call victory(?)';
