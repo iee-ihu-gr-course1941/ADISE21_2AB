@@ -1,5 +1,7 @@
 <?php
 
+	$full=0;
+
 	function show_board() {
 		global $mysqli;
 
@@ -84,6 +86,8 @@
 	}
 
 	function win_condition($x,$y,$token) {
+		global $full;
+		$full++;
 		$orig_board=read_board();
 		$board=convert_board($orig_board);
 		$c = $board[$x][$y]['piece_color'];
@@ -203,8 +207,16 @@
 			$st->bind_param('s', $token);
 			$st->execute();
 		}
+		else if($full==16) {
+			global $mysqli;
+			$sql = 'call victory(?)';
+			$st = $mysqli->prepare($sql);
+			$st->bind_param('s', $token);
+			$st->execute();
+		}
 	}
-
+ 
+ 
 	
 
 	
